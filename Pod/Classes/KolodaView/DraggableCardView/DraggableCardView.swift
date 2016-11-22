@@ -86,6 +86,7 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
         panGestureRecognizer.delegate = self
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DraggableCardView.tapRecognized(_:)))
         tapGestureRecognizer.cancelsTouchesInView = false
+        tapGestureRecognizer.delegate = self
         addGestureRecognizer(tapGestureRecognizer)
     }
     
@@ -243,7 +244,13 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        return delegate?.card(cardShouldDrag: self) ?? true
+        if gestureRecognizer == panGestureRecognizer {
+            return delegate?.card(cardShouldDrag: self) ?? true
+        } else if gestureRecognizer == tapGestureRecognizer {
+            guard let view = touch.view else { return true }
+            return !view.isKind(of: UIControl.self)
+        }
+        return true
     }
     
     func tapRecognized(_ recogznier: UITapGestureRecognizer) {

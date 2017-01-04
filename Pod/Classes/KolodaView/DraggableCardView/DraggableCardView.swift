@@ -248,7 +248,7 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
            return delegate?.card(cardShouldDrag: self) ?? true
         } else if gestureRecognizer == tapGestureRecognizer {
             guard let view = touch.view else { return true }
-            return !view.isKindOfClass(UIControl.self)
+            return !view.isKind(of: UIControl.self)
         }
         return true
     }
